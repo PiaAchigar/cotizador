@@ -7,14 +7,14 @@ Página estática donde el cliente elige qué módulos quiere en su sitio y ve e
 Todo está en `js/servicios.js`:
 
 - `CONFIG.valorHora`: dos valores (no se muestran). Se aplican **por parte**: cada módulo usa `web` salvo que tenga `mercado: "sistemas"` (agenda, tienda, gestión). Así la misma parte cuesta igual en todas las tarjetas.
-- `CONFIG`: además, imprevistos, horas por semana (para el plazo), WhatsApp y formas de pago.
+- `CONFIG`: además, imprevistos (solo para el plazo), horas por semana, WhatsApp y formas de pago.
 - `CONFIG.pagos.tarjeta.recargo` / `CONFIG.pagos.plan.recargo`: % de recargo de las cuotas. En `null` la página muestra "recargo a confirmar".
 - `MODULOS`: cada parte del trabajo con horas `min`/`max`, o un `detalle` con el desglose (las horas se suman solas).
 - `PAQUETES`: los tipos de proyecto del paso 1 y qué módulos incluyen. `mercado` elige en qué grupo de tarjetas aparece; `precio` fija un precio cerrado (como la landing con plantilla); `provee` lista extras que el paquete ya trae.
 - `req` en un módulo: extras que necesita (ej.: categorías requiere el panel). Al prenderlo se suman solos.
 - `EXTRAS`: lo opcional del paso 2. `en` limita en qué paquetes aparece.
 
-Precio de cada módulo = promedio de horas × valor hora × (1 + imprevistos), redondeado.
+Precio de cada módulo = horas **mínimas** × valor hora, redondeado. Las horas máximas son solo referencia.
 Plazo = horas promedio con imprevistos ÷ horas por semana.
 
 ## Probar en local

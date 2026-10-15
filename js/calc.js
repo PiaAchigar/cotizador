@@ -21,14 +21,24 @@ function baseHours(id, soloCobradas = false) {
 function hoursOf(id, p, soloCobradas = false) { const [a, b] = baseHours(id, soloCobradas), q = qtyOf(id, p); return [a * q, b * q]; }
 // La tarifa depende de la parte (web o sistemas), no del paquete: la misma línea cuesta igual en todas las tarjetas
 const rateOf = id => CONFIG.valorHora[MODULOS[id].mercado || "web"];
-const priceFromHours = ([a, b], rate) => Math.round((a + b) / 2 * rate * (1 + CONFIG.imprevistos / 100) / CONFIG.redondeo) * CONFIG.redondeo;
+// Precio = horas MÍNIMAS × valor hora (sin margen). Las horas máximas solo se muestran como referencia.
+const priceFromHours = ([a], rate) => Math.round(a * rate / CONFIG.redondeo) * CONFIG.redondeo;
 const priceOf = (id, p = pkg()) => priceFromHours(hoursOf(id, p, true), rateOf(id));
 const valueOf = (id, p = pkg()) => priceFromHours(hoursOf(id, p), rateOf(id));
-const isOptional = id => !!MODULOS[id].opcionalInfo;
+// Se pueden destildar: los módulos con opcionalInfo (ej.: identidad visual) y, por paquete, los de "opcionales"
+const isOptional = (id, p = pkg()) => !!MODULOS[id].opcionalInfo || (p.opcionales || []).includes(id);
+const optionalInfo = (id, p = pkg()) => (p.opcionalesInfo || {})[id] || MODULOS[id].opcionalInfo || "";
 // Un extra puede "cubrir" un módulo incluido (ej.: el manual de marca cubre la identidad visual) y entonces no se cobra dos veces
 const coveredBy = (id, p = pkg()) => chosenExtras(p).find(e => (MODULOS[e].cubre || []).includes(id));
-const isOff = (id, p = pkg()) => (isOptional(id) && state.quitados[id]) || !!coveredBy(id, p);
+const isOff = (id, p = pkg()) => (isOptional(id, p) && state.quitados[id]) || !!coveredBy(id, p);
 const activeIncl = (p = pkg()) => p.incluye.filter(id => !isOff(id, p));
+// Etiquetas de "Qué incluye": "free" = sin cargo (siempre incluido); "base" = forma parte de la propuesta y no se puede quitar
+const tagOf = (id, p = pkg()) => {
+  if (MODULOS[id].gratis) return "free";
+  if (p.incluye.includes(id) && !isOptional(id, p)) return "base";
+  return null;
+};
+const orderedIncl = (p = pkg()) => [...ORDEN.filter(id => p.incluye.includes(id)), ...p.incluye.filter(id => !ORDEN.includes(id))];
 const roundTo = n => Math.round(n / CONFIG.redondeo) * CONFIG.redondeo;
 
 const extrasFor = p => EXTRAS.map(g => ({ ...g, items: g.items.filter(e => (e.en || WEB).includes(p.id) && !p.incluye.includes(e.id)) }))
@@ -99,7 +109,7 @@ function load() {
 function shareHash(withAdmin = isAdmin()) {
   const p = new URLSearchParams({ p: state.pkg });
   const e = chosenExtras(); if (e.length) p.set("e", e.join(","));
-  const x = pkg().incluye.filter(id => isOptional(id) && state.quitados[id]); if (x.length) p.set("x", x.join(","));
+  const x = pkg().incluye.filter(id => isOptional(id, pkg()) && state.quitados[id]); if (x.length) p.set("x", x.join(","));
   const q = [...pkg().incluye, ...e].filter(id => MODULOS[id].qty && qtyOf(id) !== (pkg().qty?.[id] ?? MODULOS[id].qty)).map(id => `${id}:${qtyOf(id)}`);
   if (q.length) p.set("q", q.join(","));
   if (state.pay !== "base") p.set("pay", state.pay);

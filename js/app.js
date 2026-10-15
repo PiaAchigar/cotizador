@@ -6,6 +6,10 @@ function save() {
 
 // ── Render ──────────────────────────────────────────────────
 const openMods = new Set();
+const TAGS = {
+  free: { icon: "verified", label: "Siempre incluido", tip: "Siempre incluido: no tiene costo." },
+  base: { icon: "layers", label: "Base", tip: "Base: forma parte de esta propuesta, no se puede quitar." },
+};
 const ms = name => `<span class="ms" aria-hidden="true">${name}</span>`;
 
 function qtyInput(id) {
@@ -58,37 +62,46 @@ function pkgCard(p) {
 
 function renderIncl() {
   const p = pkg();
-  const fixed = p.incluye.filter(id => SIEMPRE.includes(id) || id === "setup");
-  const own = p.incluye.filter(id => !fixed.includes(id));
+  const ordered = orderedIncl(p);
   const row = id => {
-    const m = MODULOS[id], h = hoursOf(id), cover = coveredBy(id, p), opt = isOptional(id) && !cover, off = isOff(id, p);
+    const m = MODULOS[id], h = hoursOf(id), cover = coveredBy(id, p), opt = isOptional(id, p) && !cover, off = isOff(id, p);
+    const tag = tagOf(id, p), T = TAGS[tag];
+    const always = T ? `<span class="always ${tag === "base" ? "is-base" : ""}" tabindex="0" aria-label="${T.label}">
+        <span class="ms" aria-hidden="true">${T.icon}</span><span class="always-txt">${T.label}</span>
+        <span class="always-tip" role="tooltip">${T.tip}</span></span>` : "";
     const price = priceOf(id), value = valueOf(id);
     const priceCell = cover ? `<span class="mod-p mod-off">En tu ${MODULOS[cover].name.toLowerCase()}</span>`
-      : off ? `<span class="mod-p mod-off">Lo aportás vos</span>`
+      : off ? `<span class="mod-p mod-off"><s>${money.format(value)}</s></span>`
       : p.precio && price > 0 ? `<span class="mod-p mod-inc">Incluido</span>`
       : price === 0 ? `<span class="mod-p mod-free"><s>${money.format(value)}</s> Sin cargo</span>`
       : `<span class="mod-p">${money.format(price)}${price < value ? `<small>${money.format(value - price)} sin cargo</small>` : ""}</span>`;
     const check = opt ? `<span class="opt">
         <input type="checkbox" data-opt="${id}" id="opt-${id}" ${off ? "" : "checked"} aria-label="Incluir ${m.name}" aria-describedby="tip-${id}">
-        <span class="tip" tabindex="0" aria-label="Más información">${ms("help")}<span class="tip-txt" role="tooltip" id="tip-${id}">${m.opcionalInfo}</span></span>
+        <span class="tip" tabindex="0" aria-label="Más información">${ms("help")}<span class="tip-txt" role="tooltip" id="tip-${id}">${optionalInfo(id, p)}</span></span>
       </span>` : "";
     return `<details class="mod ${off ? "off" : ""}" data-mod="${id}" ${openMods.has(id) ? "open" : ""}>
-      <summary><span class="ms chev" aria-hidden="true">expand_more</span><span class="mod-name">${m.name}${m.qty ? ` <em>×${qtyOf(id)}</em>` : ""}${check}${m.cambios ? cambiosNote() : ""}</span>
+      <summary><span class="ms chev" aria-hidden="true">expand_more</span><span class="mod-name">${m.name}${m.qty ? ` <em>×${qtyOf(id)}</em>` : ""}${check}${always}${m.cambios && p.id !== "turnos" ? cambiosNote() : ""}</span>
         <span class="mod-h">${hrsLabel(h)}</span>${priceCell}</summary>
-      <div class="mod-body"><p>${m.desc}</p>${detalleList(id)}${m.qty ? qtyInput(id) : ""}</div>
+      <div class="mod-body"><p>${m.desc}</p>${m.cambios && p.id === "turnos" ? `<p class="ok-txt">${ms("check_circle")} Esta propuesta trae el panel por defecto, así que los cambios los vas a poder realizar vos.</p>` : ""}${detalleList(id)}${m.qty ? qtyInput(id) : ""}</div>
     </details>`;
   };
   const t = totals(p, false);
   $("inclName").textContent = p.name;
   $("inclHours").innerHTML = `${ms("schedule")} ${hrsLabel(t.hrs)} de trabajo`;
-  $("incl").innerHTML =
-    `<div class="mod-group"><h4>Lo que hace a tu ${p.id === "gestion" ? "sistema" : "página"}</h4>${own.map(row).join("")}</div>
-     <div class="mod-group"><h4>${ms("verified")} Siempre incluido</h4>${fixed.map(row).join("")}</div>
+  $("incl").innerHTML = `<div class="mod-group"><h4>Lo que hace a tu ${p.id === "gestion" ? "sistema" : "página"}</h4>${ordered.map(row).join("")}</div>
      ${p.noIncluye ? `<p class="no-incl">${ms("info")}<span><b>No incluye:</b> ${p.noIncluye}</span></p>` : ""}`;
+}
+
+// Sin el panel de notas, las notas las carga Pia con el mantenimiento mensual
+function blogDep() {
+  return chosenExtras().includes("panelNotas")
+    ? `<span class="dep ok">${ms("check_circle")} Vos cargás las notas desde tu panel.</span>`
+    : `<span class="dep warn">${ms("info")}<span>Sin panel: las notas las cargo yo, con un <a href="#grp-mant">plan de mantenimiento</a>.</span></span>`;
 }
 
 // Quién cambia los precios después: depende del panel (extra) o de un plan de mantenimiento
 function cambiosNote() {
+  if (pkg().id === "turnos") return ""; // se explica en el texto de la parte
   const panel = chosenExtras().includes("panelServ"), mant = MANT[state.mant];
   if (panel) return `<span class="dep ok">${ms("check_circle")} Los cambios los hacés vos desde tu panel.</span>`;
   if (mant) return `<span class="dep ok">${ms("check_circle")} Los cambios los hago yo, con tu ${mant.name.toLowerCase()}.</span>`;
@@ -110,6 +123,7 @@ function renderExtras() {
         </label>
         ${m.detalle ? `<details class="x-det"><summary>Ver detalle</summary>${detalleList(id)}</details>` : ""}
         ${m.qty && on ? qtyInput(id) : ""}
+        ${id === "blog" ? blogDep() : ""}
         <div class="x-foot"><span>${ms("schedule")} ${hrsLabel(hoursOf(id))}</span><b>+ ${money.format(priceOf(id))}</b></div>
       </div>`;
     }).join("")}</div>
@@ -203,7 +217,7 @@ function summaryText() {
     lines.push("", `*Módulos sumados (${ex.length})*`);
     ex.forEach(id => lines.push(`- ${MODULOS[id].name}${MODULOS[id].qty ? ` (x${qtyOf(id)})` : ""}: ${money.format(priceOf(id))}`));
   }
-  const quit = p.incluye.filter(id => isOptional(id) && state.quitados[id]);
+  const quit = p.incluye.filter(id => isOptional(id, p) && state.quitados[id]);
   if (quit.length) lines.push("", `Lo aporto yo: ${quit.map(id => MODULOS[id].name).join(", ")}`);
   if (MANT[state.mant]) lines.push("", `${MANT[state.mant].name} (${MANT[state.mant].horas} h/mes): ${mantPrice(MANT[state.mant])} por mes, aparte del total`);
   if (t.bonif) lines.push("", `Sin cargo: reuniones y cambios menores (valor ${money.format(t.bonif)})`);

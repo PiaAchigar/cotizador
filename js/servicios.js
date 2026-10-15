@@ -12,7 +12,7 @@ const CONFIG = {
   // web = diseño, secciones, SEO, extras de página y mantenimiento (compite con plantillas y freelancers locales)
   // sistemas = partes con mercado: "sistemas" (agenda, tienda, gestión e integraciones de sistema)
   valorHora: { web: 45000, sistemas: 70000 },
-  imprevistos: 15,               // % que se suma a las horas de cada módulo
+  imprevistos: 15,               // % de margen para el plazo de entrega (no se suma al precio)
   redondeo: 1000,                // los precios se redondean a este múltiplo
   horasSemana: 15,               // horas por semana que le dedicás → plazo de entrega
   // Planes de mantenimiento: se cobran por mes (horas × valor hora), aparte del total. El cliente elige uno o ninguno.
@@ -84,10 +84,6 @@ const MODULOS = {
   paginas:    { name: "Páginas internas", desc: "Servicios, Nosotros, Contacto u otras, cada una con diseño propio.", min: 2, max: 3, qty: 1 },
 
   // Funcionalidades grandes
-  agenda:     { mercado: "sistemas", name: "Turnos online propios", desc: "Tus clientes reservan solos, a cualquier hora, y vos ves la agenda del día en un calendario.", detalle: [
-                ["Base de datos de turnos, servicios y profesionales", 6, 10], ["Horarios por profesional y cálculo de turnos libres", 30, 50],
-                ["Reserva online: elegir servicio, día y horario", 16, 24], ["Usuario y contraseña para tu equipo", 6, 10],
-                ["Calendario interno: mover, cancelar y reagendar", 30, 45], ["Avisos de confirmación y recordatorio por mail", 8, 16] ] },
   tienda:     { mercado: "sistemas", name: "Tienda completa", desc: "Tus clientes compran y pagan online; vos cargás productos y seguís los pedidos desde un panel.", detalle: [
                 ["Base de datos de productos, variantes y stock", 8, 14], ["Usuario y contraseña para el panel", 6, 10],
                 ["Panel para cargar productos, precios y stock", 20, 32], ["Catálogo público con categorías y filtros", 10, 16],
@@ -99,6 +95,28 @@ const MODULOS = {
   agendaInt:  { mercado: "sistemas", name: "Agenda interna", desc: "Turnos por profesional, en vista de día y semana, con cambios y cancelaciones.", min: 30, max: 50 },
   reportes:   { mercado: "sistemas", name: "Reportes y tablero", desc: "Ventas, turnos y clientes del mes en un vistazo.", min: 16, max: 24 },
   capacitacion: { name: "Capacitación", desc: "Videollamada o video grabado explicando cómo usar tu panel.", min: 1, max: 2 },
+  // Turnero online: partes generales de cualquier turnero (sin importar el rubro).
+  // Visual (dashboard, calendario, pantallas) = web ($45.000/h). Lógica, base de datos e integraciones = sistemas ($70.000/h).
+  tLogin:     { mercado: "sistemas", name: "Login al dashboard", desc: "Usuario y contraseña para entrar a tu panel del dueño. Solo vos y las personas que elijas.", min: 2, max: 2 },
+  tNegocio:   { name: "Datos del negocio y feriados", desc: "Nombre, logo, dirección, horarios de atención y días feriados.", min: 2, max: 3 },
+  tServicios: { mercado: "sistemas", name: "Servicios", desc: "Lo que ofrecés, con su duración y precio. La duración es la que usa el sistema para calcular los turnos.", min: 3, max: 5 },
+  tProfes:    { mercado: "sistemas", name: "Profesionales", desc: "Quién atiende, y qué servicios hace cada una.", min: 3, max: 5 },
+  tHorarios:  { mercado: "sistemas", name: "Horarios por profesional", desc: "Horario semanal, vacaciones y días con horario especial.", min: 5, max: 8 },
+  tMotor:     { mercado: "sistemas", name: "Cálculo de turnos libres", desc: "Cruza servicio, profesional, horarios y turnos ya tomados para mostrar solo lo que realmente está libre.", min: 6, max: 8 },
+  tReglas:    { mercado: "sistemas", name: "Reglas de reserva", desc: "Con cuánta anticipación se puede reservar, hasta cuántos días adelante y el tiempo entre turnos.", min: 2, max: 4 },
+  tReserva:   { mercado: "sistemas", name: "Reserva online", desc: "Tus clientes eligen servicio, profesional, día y hora, y dejan sus datos.", min: 8, max: 12 },
+  tCalendario:{ name: "Calendario con días libres", desc: "Un calendario con los días disponibles en verde. Tu cliente ve de un vistazo cuándo puede venir.", min: 3, max: 5 },
+  tMiTurno:   { mercado: "sistemas", name: "\u201cMi turno\u201d", desc: "Después de reservar, tu cliente recibe la confirmación con un link para cancelar o cambiar el turno, sin llamarte.", min: 4, max: 6 },
+  tWidget:    { mercado: "sistemas", name: "Reserva dentro de tu web", desc: "El formulario de reserva se inserta en tu página actual, o se abre desde un botón.", min: 2, max: 4 },
+  tDashboard: { name: "Panel del dueño (dashboard)", desc: "Tu vista diaria: el listado de turnos del día, la grilla por profesional y los horarios de cada una. Desde acá cargás los turnos que llegan por teléfono.", min: 10, max: 15 },
+  tManual:    { mercado: "sistemas", name: "Turno manual", desc: "Para los que llegan por teléfono o WhatsApp: cargás el turno en dos clics.", min: 3, max: 5 },
+  tEstados:   { mercado: "sistemas", name: "Estados del turno", desc: "Confirmado, completado, ausente o cancelado, para saber qué pasó con cada turno.", min: 2, max: 3 },
+  tReagendar: { mercado: "sistemas", name: "Reagendar", desc: "Cambiar un turno de día, horario o profesional. Revisa que el nuevo horario esté libre y guarda el historial.", min: 4, max: 6 },
+  tFicha:     { mercado: "sistemas", name: "Ficha de cliente", desc: "Datos de cada cliente y su historial de turnos.", min: 3, max: 5 },
+  tMail:      { mercado: "sistemas", name: "Mail de confirmación y recordatorio", desc: "Un mail al reservar y otro 24 horas antes, automáticos.", min: 2, max: 2 },
+  tTests:     { name: "QA y pruebas", desc: "Pruebas que verifican que nunca se superpongan dos turnos y que todo el sistema funcione antes de entregarlo. Es la parte que más cuidamos.", min: 6, max: 10 },
+  tInfra:     { mercado: "sistemas", name: "Base de datos y copias de seguridad", desc: "Donde se guardan tus turnos y clientes, con copias automáticas.", min: 3, max: 5 },
+  avisoWA:    { mercado: "sistemas", name: "Aviso por WhatsApp", desc: "Confirmación y recordatorio por WhatsApp, con plantillas aprobadas por Meta.", min: 6, max: 10 },
 
   // Extras
   manual:     { name: "Manual de marca", cubre: ["estilo"], desc: "Un documento con las reglas de tu marca para que se vea igual en la web, en redes y en todo lo que imprimas. Si no tenés logo, sumá también el diseño de logo. Incluye la identidad visual de la página, que deja de cobrarse aparte.", detalle: [
@@ -129,7 +147,8 @@ const MODULOS = {
   faq:        { name: "Preguntas frecuentes", desc: "Respondé las dudas de siempre antes de que te escriban.", min: 1, max: 1.5 },
   galeria:    { name: "Galería de trabajos", desc: "Fotos con vista ampliada, antes y después.", min: 1.5, max: 2.5 },
   animaciones:{ name: "Animaciones sutiles", desc: "Secciones que aparecen al bajar y botones con efecto. Se siente más cuidada.", min: 0.5, max: 1 },
-  blog:       { name: "Blog o novedades", desc: "Publicá notas y novedades; suma visitas desde Google.", min: 6, max: 10 },
+  blog:       { name: "Blog o novedades", desc: "Publicá notas y novedades. Tus clientes las leen en un apartado de tu web, y cada nota tiene su propia página para aparecer en Google.", min: 6, max: 10 },
+  panelNotas: { mercado: "sistemas", name: "Panel para cargar notas", desc: "Una vista dentro de tu panel (dashboard) para escribir, subir imágenes y publicar las notas que quieras, cuando quieras.", min: 6, max: 8 },
   form:       { name: "Formulario de contacto", desc: "Te llega un mail cada vez que alguien escribe. Con protección contra spam.", min: 2, max: 3 },
   gbp:        { name: "Tu negocio en Google (Google Business)", desc: "Creo u optimizo tu perfil de empresa: el recuadro que aparece en Google y Google Maps con horarios, fotos, teléfono y reseñas. No es el mapa de la página, que ya está incluido.", min: 1, max: 2 },
   analytics:  { name: "Medir visitas", desc: "Google Analytics o Meta Pixel: cuánta gente entra y cuántos te contactan.", min: 1, max: 2 },
@@ -138,8 +157,8 @@ const MODULOS = {
   integracion:{ name: "Otra integración", desc: "¿Necesitás conectar tu página con una herramienta que no está en la lista? Por ejemplo, tu CRM, un sistema de envíos o una planilla de Google. Contame cuál y la evaluamos.", min: 4, max: 6, qty: 1 },
   turnosExt:  { name: "Reservas con Calendly o Google Calendar", desc: "Una agenda que ya existe, integrada a tu página. La opción económica.", min: 1, max: 2 },
   linkMP:     { name: "Cobros con Mercado Pago", desc: "Un botón de pago que lleva a la pantalla segura de Mercado Pago; tu cliente paga ahí y vuelve a tu página.", min: 3.5, max: 4.5 },
-  sena:       { mercado: "sistemas", name: "Cobrar seña al reservar", desc: "El turno se confirma solo cuando paga la seña por Mercado Pago.", detalle: [["Pago con Mercado Pago integrado", 12, 20], ["Seña y confirmación del turno", 8, 14]] },
-  vencimiento:{ mercado: "sistemas", name: "Reservas que vencen", desc: "Si no se confirma a tiempo, el turno se libera solo.", min: 6, max: 10 },
+  sena:       { mercado: "sistemas", name: "Cobrar seña al reservar", desc: "El turno se confirma solo cuando paga la seña por Mercado Pago.", detalle: [["Pago con Mercado Pago integrado", 6, 10], ["Seña y confirmación del turno", 4, 7]] },
+  vencimiento:{ mercado: "sistemas", name: "Reservas que vencen", desc: "Si no se confirma a tiempo, el turno se libera solo.", min: 3, max: 5 },
   promos:     { req: ["panelServ"], name: "Promociones y combos", desc: "Descuentos, combos y destacados en la portada.", min: 5, max: 8 },
   buscador:   { req: ["panelServ"], name: "Buscador", desc: "Encontrar por nombre o categoría.", min: 2, max: 4 },
   buscadorIA: { req: ["panelServ"], name: "Buscador con inteligencia artificial", desc: "La persona escribe lo que quiere lograr y aparece lo que le sirve.", min: 8, max: 12 },
@@ -150,6 +169,11 @@ const MODULOS = {
   avisos:     { mercado: "sistemas", name: "Recordatorios automáticos", desc: "Mails o WhatsApp de recordatorio de turnos y vencimientos.", min: 8, max: 16 },
 };
 
+// Orden de avance del proyecto: así se muestran las partes en "Qué incluye"
+const ORDEN = ["relev", "procesos", "estilo", "maqueta", "estructura", "servicios", "nosotros", "contacto", "paginas",
+  "tNegocio", "tLogin", "tServicios", "tProfes", "tHorarios", "tMotor", "tReglas", "tReserva", "tCalendario", "tMiTurno",
+  "tDashboard", "tManual", "tEstados", "tReagendar", "tFicha", "tMail", "tInfra", "pantallas", "usuarios", "crm", "agendaInt", "reportes", "catalogo",
+  "responsive", "seo", "tTests", "qa", "setup", "revisiones", "legales", "capacitacion"];
 const SIEMPRE = ["relev", "setup", "responsive", "seo", "qa", "revisiones"];
 
 // ─────────────────────────────────────────────────────────────
@@ -169,9 +193,16 @@ const PAQUETES = [
   { id: "sitio", icon: "auto_stories", name: "Sitio de varias páginas", tagline: "Más espacio para contar todo lo que hacés.",
     ideal: "Negocios con muchos servicios o información que no entra en una sola página.",
     incluye: [...SIEMPRE, "estilo", "maqueta", "estructura", "servicios", "nosotros", "contacto", "paginas"], qty: { paginas: 3 }, mercado: "web", pago: "mitades" },
-  { id: "turnos", icon: "event_available", name: "Turnos online", tagline: "Tus clientes reservan solos, las 24 horas.",
+  { id: "turnos", icon: "event_available", name: "Turnero online", tagline: "Tus clientes reservan solos, las 24 horas, y vos ves tu agenda en un solo panel.",
     ideal: "Centros de estética, consultorios, estudios y cualquier negocio que trabaje con turnos.",
-    incluye: [...SIEMPRE, "estilo", "maqueta", "estructura", "servicios", "nosotros", "contacto", "agenda", "capacitacion"], mercado: "sistemas", pago: "hitos" },
+    incluye: [...SIEMPRE, "estilo", "maqueta", "servicios", "legales",
+      "tLogin", "tNegocio", "tServicios", "tProfes", "tHorarios", "tMotor", "tReglas", "tReserva", "tCalendario", "tMiTurno",
+      "tDashboard", "tManual", "tEstados", "tReagendar", "tFicha", "tMail", "tTests", "tInfra", "capacitacion"], mercado: "sistemas", pago: "hitos",
+    // Se pueden destildar: el texto de ayuda está en opcionalesInfo
+    opcionales: ["seo", "tReserva"],
+    opcionalesInfo: {
+      seo: "Si no lo querés, destildalo: el sistema se entrega sin la preparación para Google ni para asistentes de IA.",
+      tReserva: "Si no querés que tus clientes reserven solos, destildalo: el sistema queda como agenda interna, y vos cargás todos los turnos." } },
   { id: "tienda", icon: "shopping_cart", name: "Tienda online", tagline: "Vendé y cobrá por internet, con tu propia tienda.",
     ideal: "Marcas con productos que quieren vender online sin pagar comisión mensual a una plataforma.",
     incluye: [...SIEMPRE, "estilo", "maqueta", "estructura", "nosotros", "contacto", "tienda", "legales", "capacitacion"], provee: ["panelServ", "categorias"], mercado: "sistemas", pago: "hitos" },
@@ -193,7 +224,7 @@ const EXTRAS = [
     { id: "panelServ", en: ["landing", "sitio"] }, { id: "categorias", en: ["landing", "sitio"] } ]},
   { title: "Más secciones", icon: "view_agenda", items: [
     { id: "faq" }, { id: "galeria" },
-    { id: "paginas", en: ["landing", "turnos", "tienda"] }, { id: "blog", en: ["landing", "sitio", "turnos", "tienda"] } ]},
+    { id: "paginas", en: ["landing", "turnos", "tienda"] }, { id: "blog", en: ["landing", "sitio", "turnos", "tienda"] }, { id: "panelNotas", en: ["landing", "sitio", "turnos", "tienda"] } ]},
   { title: "Que te encuentren", icon: "campaign", items: [
     { id: "gbp" }, { id: "velocidad", en: ["landing", "sitio", "turnos", "tienda"] },
     { id: "legales", en: ["plantilla", "landing", "sitio", "turnos"] } ]},
@@ -202,7 +233,7 @@ const EXTRAS = [
     { id: "turnosExt", en: ["plantilla", "landing", "sitio"] }, { id: "linkMP", en: ["plantilla", "landing", "sitio", "turnos"] },
     { id: "integracion", en: [...WEB, "gestion"] } ]},
   { title: "Para tus turnos", icon: "event", items: [
-    { id: "sena", en: ["turnos"] }, { id: "vencimiento", en: ["turnos"] } ]},
+    { id: "tWidget", en: ["turnos"] }, { id: "avisoWA", en: ["turnos"] }, { id: "sena", en: ["turnos"] }, { id: "vencimiento", en: ["turnos"] } ]},
   { title: "Potenciá tu catálogo", icon: "bolt", note: "En landing y sitio requieren el panel para editar tus servicios.", items: [
     { id: "promos", en: ["landing", "sitio", "tienda"] }, { id: "buscador", en: ["landing", "sitio", "tienda"] }, { id: "buscadorIA", en: ["landing", "sitio", "tienda"] } ]},
   { title: "Sumale al sistema", icon: "extension", items: [

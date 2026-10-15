@@ -13,13 +13,14 @@ function itemRow(id, p, kind) {
   const m = MODULOS[id], price = priceOf(id, p), value = valueOf(id, p), cover = coveredBy(id, p);
   let amount;
   if (cover) amount = `<span class="muted">En tu ${MODULOS[cover].name.toLowerCase()}</span>`;
-  else if (isOff(id, p)) amount = `<span class="muted">Lo aportás vos</span>`;
+  else if (isOff(id, p)) amount = `<s>${money.format(value)}</s>`;
   else if (kind === "incl" && p.precio && price > 0) amount = `<span class="muted">Incluido</span>`;
   else if (price === 0) amount = `<s>${money.format(value)}</s> <span class="free">Sin cargo</span>`;
   else amount = money.format(price) + (price < value ? `<small class="free">${money.format(value - price)} sin cargo</small>` : "");
   const off = isOff(id, p);
+  const tag = tagOf(id, p), tagTxt = tag === "free" ? "Siempre incluido" : tag === "base" ? "Base" : "";
   return `<tr class="${off ? "off" : ""}">
-    <td><b>${m.name}${m.qty ? ` ×${qtyOf(id, p)}` : ""}</b><p>${m.desc}</p>${off ? "" : detalleRows(id)}</td>
+    <td><b>${m.name}${m.qty ? ` ×${qtyOf(id, p)}` : ""}</b>${tagTxt ? ` <span class="ptag ptag-${tag}">${tagTxt}</span>` : ""}<p>${m.desc}</p>${off ? "" : detalleRows(id)}</td>
     <td class="h">${hrsLabel(hoursOf(id, p))}</td>
     <td class="n">${amount}</td>
   </tr>`;
@@ -48,8 +49,7 @@ function choice(p, t, base, ex, mt) {
 function render() {
   const p = pkg(), t = totals(), base = totals(p, false), ex = chosenExtras(p);
   const plan = payPlans(t.total)[state.pay], mt = MANT[state.mant];
-  const fixed = p.incluye.filter(id => SIEMPRE.includes(id) || id === "setup");
-  const own = p.incluye.filter(id => !fixed.includes(id));
+  const all = orderedIncl(p);
   const table = (rows, kind) => `<table class="items">
     <thead><tr><th>Detalle</th><th class="h">Trabajo</th><th class="n">Importe</th></tr></thead>
     <tbody>${rows.map(id => itemRow(id, p, kind)).join("")}</tbody></table>`;
@@ -86,9 +86,7 @@ function render() {
 
   <section class="block">
     <h2>Qué incluye la propuesta</h2>
-    ${table(own, "incl")}
-    <h3>Siempre incluido</h3>
-    ${table(fixed, "incl")}
+    ${table(all, "incl")}
     ${p.noIncluye ? `<p class="note"><b>No incluye:</b> ${p.noIncluye}</p>` : ""}
   </section>
 
