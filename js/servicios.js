@@ -170,10 +170,20 @@ const MODULOS = {
 };
 
 // Orden de avance del proyecto: así se muestran las partes en "Qué incluye"
-const ORDEN = ["relev", "procesos", "estilo", "maqueta", "estructura", "servicios", "nosotros", "contacto", "paginas",
-  "tNegocio", "tLogin", "tServicios", "tProfes", "tHorarios", "tMotor", "tReglas", "tReserva", "tCalendario", "tMiTurno",
-  "tDashboard", "tManual", "tEstados", "tReagendar", "tFicha", "tMail", "tInfra", "pantallas", "usuarios", "crm", "agendaInt", "reportes", "catalogo",
-  "responsive", "seo", "tTests", "qa", "setup", "revisiones", "legales", "capacitacion"];
+const ORDEN = [
+  // Inicio: reunión y elección
+  "relev", "relevCorto", "procesos", "plElegir", "plAdaptar",
+  // Diseño y contenido
+  "estilo", "maqueta", "plCarga", "estructura", "servicios", "nosotros", "paginas",
+  // Sistema: base de datos primero, después la lógica y las pantallas
+  "tInfra", "tNegocio", "tLogin", "tServicios", "tProfes", "tHorarios", "tMotor", "tReglas", "tReserva", "tCalendario", "tMiTurno",
+  "tDashboard", "tManual", "tEstados", "tReagendar", "tFicha", "tMail", "pantallas", "usuarios", "crm", "agendaInt", "reportes", "catalogo", "tienda",
+  // Ajustes para celular y SEO
+  "responsive", "plCelular", "seo", "plSeo",
+  // Pruebas, legales, contacto y publicación
+  "tTests", "qa", "legales", "contacto", "setup",
+  // Cierre
+  "revisiones", "plCambios", "capacitacion"];
 const SIEMPRE = ["relev", "setup", "responsive", "seo", "qa", "revisiones"];
 
 // ─────────────────────────────────────────────────────────────
