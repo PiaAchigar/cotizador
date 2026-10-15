@@ -1,0 +1,6 @@
+# Claude Code
+CLAUDE.md
+.claude/
+
+# CodeGraph (índice local, se regenera solo)
+.codegraph/

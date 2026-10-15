@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pia_dev presupuesto</title>
+  <meta name="description" content="Elegí qué tipo de página necesitás, sumá lo que quieras y mirá el precio, el plazo y las formas de pago al instante.">
+  <meta name="theme-color" content="#0a0a0c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..24,400,0..1&display=block">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-in">
+      <a class="logo" id="brandLink" href="https://www.piadev.com.ar" target="_blank" rel="noopener"><span id="brand">piaDev</span><span class="dot">.</span></a>
+      <a class="btn btn-ghost" id="navWa" href="#" target="_blank" rel="noopener" hidden>
+        <span class="ms">chat</span> Consultame
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-mesh" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="badge"><span class="pulse"></span>Cotizador online</span>
+      <h1 id="title" aria-label="Armá el presupuesto de tu página web o tu sistema a medida">Armá el presupuesto de <span class="rot" aria-hidden="true"><span class="rot-a grad is-on">tu página web</span><span class="rot-b grad-green">tu sistema a medida</span></span></h1>
+      <p class="lede">En tres pasos elegís qué necesitás y ves al instante cuánto cuesta, cuánto tarda y cómo lo podés pagar. Cada parte muestra las horas de trabajo que lleva, para que sepas exactamente qué estás pagando.</p>
+      <p class="lede lede-2">Más abajo vas a encontrar varias propuestas. Si ninguna se ajusta a lo que buscás, <a id="ledeContact" href="#" target="_blank" rel="noopener">escribime y armamos una a tu medida</a>.</p>
+      <ol class="steps-nav">
+        <li><a href="#paso1"><b>1</b> Propuesta</a></li>
+        <li><a href="#paso2"><b>2</b> Módulos</a></li>
+        <li><a href="#paso3"><b>3</b> Forma de pago</a></li>
+      </ol>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <div class="flow">
+      <section id="paso1" class="step">
+        <div class="step-head">
+          <span class="step-n">1</span>
+          <div>
+            <h2>¿Qué tipo de página necesitás?</h2>
+            <p>Elegí la que más se parezca a lo que buscás. Después podés sumarle cosas.</p>
+          </div>
+        </div>
+        <div class="block-title"><h3 id="propuestasTitle">Propuestas</h3></div>
+        <div class="pkgs" id="pkgs" role="radiogroup" aria-labelledby="propuestasTitle"></div>
+
+        <div class="card incl" id="inclCard">
+          <div class="incl-head">
+            <h3>Qué incluye <span id="inclName"></span></h3>
+            <span class="pill" id="inclHours"></span>
+          </div>
+          <p class="hint">Tocá cada parte para ver el detalle del trabajo.</p>
+          <div id="incl"></div>
+        </div>
+      </section>
+
+      <section id="paso2" class="step">
+        <div class="step-head">
+          <span class="step-n">2</span>
+          <div>
+            <h2>¿Querés sumarle algo?</h2>
+            <p>Todo es opcional. Lo que no sumes ahora se puede agregar más adelante.</p>
+          </div>
+        </div>
+        <div class="block-title"><h3>Módulos</h3></div>
+        <div id="extras"></div>
+      </section>
+
+      <section id="paso3" class="step">
+        <div class="step-head">
+          <span class="step-n">3</span>
+          <div>
+            <h2>¿Cómo querés pagar?</h2>
+            <p>Elegí la opción que te quede más cómoda.</p>
+          </div>
+        </div>
+        <div class="pays" id="pays" role="radiogroup" aria-label="Forma de pago"></div>
+      </section>
+    </div>
+
+    <aside class="summary card" id="resumen" aria-label="Resumen del presupuesto">
+      <div class="sum-pkg"><span class="ms" id="sIcon">web</span><div><small>Tu propuesta</small><b id="sPkg"></b></div></div>
+      <div class="sum-total">
+        <small>Total estimado</small>
+        <div class="total" id="sTotal">$0</div>
+        <div class="bonif" id="sBonif"></div>
+      </div>
+      <div class="sum-facts">
+        <div><span class="ms">schedule</span><div><small>Trabajo</small><b id="sHours"></b></div></div>
+        <div><span class="ms">calendar_month</span><div><small>Entrega</small><b id="sWeeks"></b></div></div>
+      </div>
+      <div class="sum-pay" id="sPay"></div>
+      <div class="sum-line"><span>Módulos sumados</span><span id="sExtras">0</span></div>
+      <div class="sum-line"><span>Mantenimiento mensual</span><span id="sMaint"></span></div>
+      <div class="actions">
+        <button class="btn btn-primary" id="waBtn" type="button" hidden><span class="ms">send</span> Enviar por WhatsApp</button>
+        <button class="btn btn-ghost" id="copyBtn" type="button"><span class="ms">content_copy</span> Copiar resumen</button>
+        <a class="btn btn-ghost" id="pdfLink" href="presupuesto.html" target="_blank" rel="noopener"><span class="ms">download</span> Descargar presupuesto</a>
+        <button class="btn btn-ghost" id="linkBtn" type="button" hidden><span class="ms">link</span> Copiar link para el cliente</button>
+      </div>
+      <div class="admin" id="admin" hidden>
+        <label for="clientName">Nombre del cliente (para el link)</label>
+        <input id="clientName" type="text" placeholder="Ej: Estética Luna">
+      </div>
+      <div class="copied" id="copyMsg" role="status"></div>
+      <textarea id="copyFallback" hidden readonly aria-label="Texto para copiar"></textarea>
+    </aside>
+  </main>
+
+  <section class="wrap info">
+    <h2 class="section-title">Por qué una página <span class="grad">a medida</span></h2>
+    <div class="compare card">
+      <div class="cmp-row cmp-head"><span></span><span>Plantilla que armás vos</span><span>Página a medida</span></div>
+      <div class="cmp-row"><span>Tu tiempo</span><span>Horas aprendiendo a usar la plataforma</span><span>Me contás qué necesitás y yo me encargo</span></div>
+      <div class="cmp-row"><span>Diseño</span><span>El mismo que usan miles de negocios</span><span>Hecho a partir de tu marca</span></div>
+      <div class="cmp-row"><span>Costo mensual</span><span>Suscripción a la plataforma, siempre</span><span>Hosting gratuito para empezar</span></div>
+      <div class="cmp-row"><span>Funciones</span><span>Las que trae la plataforma</span><span>Las que tu negocio necesita (turnos, panel, IA…)</span></div>
+      <div class="cmp-row"><span>Quién te ayuda</span><span>Un centro de ayuda</span><span>Una persona que conoce tu proyecto</span></div>
+    </div>
+
+    <div class="info-grid">
+      <div class="card">
+        <span class="ms ic">verified</span>
+        <h3>Siempre incluido</h3>
+        <ul>
+          <li>Reunión inicial para entender tu negocio.</li>
+          <li>Que se vea bien en celulares.</li>
+          <li>Preparación para aparecer en Google.</li>
+          <li>Pruebas antes de publicar.</li>
+          <li>Dos rondas de cambios.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ms ic">info</span>
+        <h3>Lo que no está incluido</h3>
+        <ul>
+          <li>Dominio (tu dirección .com.ar o .com), queda a tu nombre.</li>
+          <li>Planes pagos de hosting, si algún día los necesitás.</li>
+          <li>Comisiones de Mercado Pago y servicios de envío de mails o WhatsApp.</li>
+          <li>Fotos profesionales o imágenes de bancos pagos.</li>
+          <li>Costos de uso de inteligencia artificial: los tokens de OpenAI, Claude u otro proveedor para armar embeddings (RAG) y generar respuestas. Se pagan según el uso, directo al proveedor.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="ms ic">calculate</span>
+        <h3>Cómo calculo el precio</h3>
+        <p>Cada parte tiene un rango de horas de trabajo según su complejidad. El precio usa el promedio, con un margen para imprevistos. El plazo considera los días de revisión y tus respuestas.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Preguntas frecuentes</h2>
+    <div class="faq">
+      <details class="card"><summary>¿Qué es un dominio y qué es el hosting?</summary><p>El dominio es la dirección de tu página (por ejemplo, tunegocio.com.ar). El hosting es la computadora donde vive la página para que esté online todo el tiempo. El dominio se paga una vez por año y queda a tu nombre; para el hosting uso servicios con planes gratuitos que alcanzan para empezar.</p></details>
+      <details class="card"><summary>¿Por qué tarda varias semanas?</summary><p>Además de programar, hay que diseñar, esperar tus comentarios, hacer los cambios y probar todo. El plazo que ves contempla esas idas y vueltas.</p></details>
+      <details class="card"><summary>¿Puedo sumar cosas después?</summary><p>Sí. Podés empezar con lo básico y agregar extras cuando tu negocio lo necesite. Se presupuestan con el mismo criterio.</p></details>
+      <details class="card"><summary>¿El precio puede cambiar?</summary><p>Es una estimación: después de la reunión inicial te confirmo el presupuesto final por escrito, antes de empezar. Los valores se mantienen durante 30 días corridos desde que recibís el presupuesto, y con el primer pago el precio queda congelado.</p></details>
+      <details class="card"><summary>¿Qué es el mantenimiento mensual?</summary><p>Es opcional: actualizaciones, cambios chicos de contenido y revisar que todo siga funcionando bien.</p></details>
+    </div>
+  </section>
+
+  <footer class="foot wrap">
+    <div class="foot-top">
+      <a class="logo" id="brandLink2" href="https://www.piadev.com.ar" target="_blank" rel="noopener"><span id="brand2">piaDev</span><span class="dot">.</span></a>
+      <a class="foot-link" id="portfolioLink" href="https://www.piadev.com.ar" target="_blank" rel="noopener">www.piadev.com.ar <span class="ms">arrow_outward</span></a>
+    </div>
+    <div class="terms">
+      <h3><span class="ms">gavel</span> Condiciones del presupuesto</h3>
+      <ul>
+        <li><b>Vigencia: <span id="vigDias">30</span> días corridos</b> desde que recibís este presupuesto. Pasado ese plazo, los valores pueden actualizarse.</li>
+        <li><b>Con el primer pago, el precio queda congelado</b> para todo lo incluido en el proyecto, aunque el trabajo dure varios meses.</li>
+        <li><b>Lo que se sume después</b> (secciones, funciones o cambios fuera de las rondas incluidas) se presupuesta aparte, con el mismo criterio.</li>
+      </ul>
+    </div>
+  </footer>
+
+  <div class="mbar" id="mbar">
+    <div><small id="mPkg"></small><b id="mTotal">$0</b><small id="mWeeks"></small></div>
+    <a class="btn btn-primary" href="#resumen">Ver resumen</a>
+  </div>
+
+  <script src="js/servicios.js"></script>
+  <script src="js/calc.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

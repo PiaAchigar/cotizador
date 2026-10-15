@@ -1,0 +1,134 @@
+/* Presupuesto: documento claro (para imprimir) con los acentos de la marca */
+:root {
+  --ink: #111827;
+  --text: #374151;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --soft: #f5f5ff;
+  --primary: #6366f1;
+  --secondary: #a855f7;
+  --green: #059669;
+  --f-head: "Poppins", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+body { margin: 0; background: #e8e8ee; color: var(--text); font: 13px/1.5 var(--f-body); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1, h2, h3 { font-family: var(--f-head); color: var(--ink); margin: 0; }
+p { margin: 0; }
+
+/* Barra de pantalla (no se imprime) */
+.toolbar { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; gap: 10px; padding: 12px 16px; background: #0a0a0c; }
+.tb-btn { font: 600 14px var(--f-body); padding: 9px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .15); background: rgba(255, 255, 255, .06); color: #fff; text-decoration: none; cursor: pointer; }
+.tb-primary { background: linear-gradient(135deg, #6366f1, #a855f7); border-color: transparent; }
+.tb-hint { text-align: center; color: var(--muted); font-size: 12px; margin: 12px 16px 0; }
+
+/* Hoja A4 */
+.sheet { width: 210mm; max-width: calc(100% - 32px); min-height: 297mm; margin: 16px auto 40px; background: #fff; padding: 16mm 15mm; box-shadow: 0 10px 40px rgba(0, 0, 0, .12); border-radius: 4px; }
+
+.doc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 14px; border-bottom: 3px solid; border-image: linear-gradient(90deg, var(--primary), var(--secondary)) 1; }
+.logo { font: 700 30px var(--f-head); color: var(--ink); letter-spacing: -0.04em; line-height: 1; }
+.logo span { color: var(--primary); }
+.logo.sm { font-size: 15px; }
+.brand-sub { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.meta { display: grid; gap: 4px; text-align: right; font-size: 12px; }
+.meta span { color: var(--muted); margin-right: 8px; }
+.meta b { color: var(--ink); font-weight: 600; }
+
+.title-block { margin: 22px 0 16px; }
+.title-block h1 { font-size: 24px; font-weight: 700; margin-top: 4px; line-height: 1.25; }
+.for { margin-top: 4px; font-size: 14px; }
+.for b { color: var(--ink); }
+.tagline { color: var(--muted); margin-top: 4px; }
+
+.kpis { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 8px; margin-bottom: 20px; }
+.kpi { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.kpi span { display: block; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.kpi b { font: 600 14px var(--f-head); color: var(--ink); }
+.kpi-main { background: linear-gradient(135deg, var(--primary), var(--secondary)); border: 0; }
+.kpi-main span { color: rgba(255, 255, 255, .8); }
+.kpi-main b { color: #fff; font-size: 19px; }
+
+.block { margin-top: 18px; }
+
+/* Tu elección: se lee como una suma */
+.choice { break-inside: avoid; }
+.ch { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.ch-row { display: grid; grid-template-columns: 22px 78px 1fr auto; gap: 10px; align-items: baseline; padding: 9px 14px; border-top: 1px solid var(--line); }
+.ch-row:first-child { border-top: 0; background: var(--soft); }
+.ch-sign { font: 600 15px var(--f-head); color: var(--primary); text-align: center; }
+.ch-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.ch-name { color: var(--ink); min-width: 0; }
+.ch-name b { font-weight: 600; }
+.ch-name small { display: block; color: var(--muted); font-size: 11px; margin-top: 1px; }
+.ch-amt { text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ch-total { border-top: 2px solid var(--ink); }
+.ch-total .ch-sign, .ch-total .ch-amt { font: 700 16px var(--f-head); color: var(--ink); }
+.ch-total .ch-label { color: var(--ink); }
+.ch-total .ch-name { color: var(--muted); font-size: 12px; }
+.ch-aside { background: #f9fafb; }
+.ch-aside .ch-name, .ch-aside .ch-amt { color: var(--muted); font-weight: 500; }
+.block h2 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.block h3 { font: 600 10.5px var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 14px 0 4px; }
+
+.items { width: 100%; border-collapse: collapse; }
+.items th { text-align: left; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 6px 0; border-bottom: 1px solid var(--line); }
+.items td { vertical-align: top; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.items tr { break-inside: avoid; }
+.items td b { color: var(--ink); font-weight: 600; }
+.items td p { color: var(--muted); font-size: 11.5px; margin-top: 1px; }
+.items .h { width: 70px; text-align: right; white-space: nowrap; color: var(--muted); padding-left: 10px; }
+.items .n { width: 120px; text-align: right; white-space: nowrap; color: var(--ink); font-weight: 600; padding-left: 10px; font-variant-numeric: tabular-nums; }
+.items .n small { display: block; font-weight: 500; font-size: 10.5px; }
+.items s { color: var(--muted); font-weight: 400; }
+.items tr.off b, .items tr.off p { color: #9ca3af; }
+.muted { color: var(--muted); font-weight: 500; font-style: italic; }
+.free { color: var(--green); font-style: normal; }
+.sub { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 2px; }
+.sub li { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--text); padding: 2px 8px; background: var(--soft); border-radius: 4px; }
+.sub li span:last-child { color: var(--muted); white-space: nowrap; }
+.note { margin-top: 10px; padding: 8px 12px; background: #f9fafb; border-left: 3px solid var(--primary); font-size: 11.5px; }
+.note b { color: var(--ink); }
+
+.totals-block { display: flex; justify-content: flex-end; break-inside: avoid; }
+.totals { width: 60%; border-collapse: collapse; }
+.totals td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.totals td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+.stack { display: grid; gap: 16px; break-inside: avoid; }
+.stack > div { max-width: 50%; }
+.totals .bonif td { color: var(--green); font-weight: 500; text-align: right; border-bottom: 0; font-size: 11.5px; padding-top: 2px; }
+.totals .grand td { border-bottom: 0; border-top: 2px solid var(--ink); padding-top: 10px; font: 700 17px var(--f-head); color: var(--ink); }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; break-inside: avoid; }
+.pay-title { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.mini { width: 100%; border-collapse: collapse; }
+.mini td { padding: 3px 0; border-bottom: 1px dashed var(--line); }
+.mini td:last-child { text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.small { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.checks, .dots { margin: 4px 0 0; padding-left: 16px; display: grid; gap: 3px; font-size: 11.5px; }
+.checks li::marker { content: "✓  "; color: var(--green); }
+.dots b { color: var(--ink); }
+
+.end { break-inside: avoid; }
+.doc-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+
+@media (max-width: 700px) {
+  .sheet { padding: 20px 16px; min-height: 0; }
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .two { grid-template-columns: 1fr; }
+  .stack > div { max-width: none; }
+  .totals { width: 100%; }
+  .doc-head { flex-direction: column; }
+  .meta { text-align: left; }
+}
+
+/* Margen 0 en la página: así el navegador no tiene dónde imprimir fecha, título y URL.
+   El espacio en blanco lo da el padding de la hoja, que se repite en cada página (box-decoration-break). */
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { margin: 0; padding: 0; background: #fff; }
+  /* Solo se imprime la hoja: oculta la barra y cualquier botón flotante que agreguen extensiones del navegador */
+  body > :not(.sheet), html > :not(head):not(body) { display: none !important; }
+  .sheet { width: auto; max-width: none; min-height: 0; margin: 0; padding: 12mm 14mm; box-shadow: none; border-radius: 0;
+    -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+}
