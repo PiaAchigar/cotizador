@@ -90,10 +90,22 @@ const MODULOS = {
                 ["Carrito de compras", 12, 20], ["Pago con Mercado Pago integrado", 12, 20], ["Envíos y retiro en el local", 8, 16],
                 ["Panel de pedidos", 16, 24], ["Mails de confirmación de compra", 6, 10] ] },
   procesos:   { mercado: "sistemas", name: "Análisis de cómo trabajás hoy", desc: "Relevo tus procesos, planillas y herramientas para que el sistema se adapte a vos, no al revés.", min: 6, max: 12 },
-  usuarios:   { mercado: "sistemas", name: "Usuarios y permisos", desc: "Cada persona de tu equipo entra con su usuario y ve solo lo que le corresponde.", min: 8, max: 14 },
-  crm:        { mercado: "sistemas", name: "Fichas de clientes", desc: "Datos, historial de visitas o compras, notas y búsqueda rápida de cada cliente.", min: 24, max: 40 },
-  agendaInt:  { mercado: "sistemas", name: "Agenda interna", desc: "Turnos por profesional, en vista de día y semana, con cambios y cancelaciones.", min: 30, max: 50 },
-  reportes:   { mercado: "sistemas", name: "Reportes y tablero", desc: "Ventas, turnos y clientes del mes en un vistazo.", min: 16, max: 24 },
+  usuarios:   { mercado: "sistemas", name: "Usuarios y permisos", desc: "Cada persona de tu equipo entra con su usuario y ve solo lo que le corresponde.", min: 3, max: 5 },
+  crm:        { mercado: "sistemas", name: "Fichas de clientes", desc: "Datos, historial de visitas o compras, notas y búsqueda rápida de cada cliente.", min: 6, max: 10 },
+  crmSeg:     { mercado: "sistemas", name: "Seguimiento de ventas", desc: "Cada oportunidad tiene su etapa, sus recordatorios y sus tareas, para que nadie quede sin contestar.", min: 4, max: 6 },
+  reportes:   { mercado: "sistemas", name: "Reportes y tablero", desc: "Ventas, turnos y clientes del mes en un vistazo.", min: 4, max: 6 },
+  // Control de inventario: stock de productos con base de datos y registro de cada movimiento
+  invBase:    { mercado: "sistemas", name: "Base de datos, depósitos y copias de seguridad", desc: "Dónde se guarda toda la información, cuántos depósitos o puntos de stock tenés y copias automáticas.", min: 4, max: 6 },
+  invProductos:{ mercado: "sistemas", name: "Catálogo de productos", desc: "Alta de productos con categorías, unidades de medida, costos, precios y proveedor.", min: 6, max: 8 },
+  invMov:     { mercado: "sistemas", name: "Movimientos de stock", desc: "Ingresos, egresos, ajustes y transferencias entre depósitos. Cada movimiento queda con fecha, persona y motivo.", min: 8, max: 12 },
+  invStock:   { mercado: "sistemas", name: "Stock actual y alertas de mínimo", desc: "Cuánto hay de cada producto en cada depósito, y un aviso cuando baja del mínimo que definas.", min: 4, max: 6 },
+  invRecepcion:{ mercado: "sistemas", name: "Recepción de mercadería", desc: "Cargás lo que llegó de cada proveedor, con cantidad y costo. Suma al stock solo.", min: 4, max: 6 },
+  invHistorial:{ mercado: "sistemas", name: "Historial de movimientos", desc: "Quién hizo cada cambio, qué, cuándo y por qué. Nada se borra sin dejar registro.", min: 3, max: 5 },
+  invPanel:   { name: "Panel visual de stock", desc: "Un tablero con el estado de tu stock: qué se acaba, qué está quieto y qué se mueve más.", min: 6, max: 8 },
+  invReportes:{ mercado: "sistemas", name: "Reportes de stock", desc: "Valor del inventario, productos de mayor rotación y faltantes, en un vistazo.", min: 4, max: 6 },
+  invTests:   { mercado: "sistemas", name: "Pruebas de los cálculos de stock", desc: "Verifico que cada movimiento deje bien el saldo, para que el número que ves siempre sea el real.", min: 6, max: 8 },
+  multiNeg:   { mercado: "sistemas", name: "Multi negocios", desc: "Varios negocios, locales o marcas en un mismo sistema, cada uno con su stock separado.", min: 6, max: 8 },
+  barcode:    { mercado: "sistemas", name: "Lector de código de barras", desc: "Escaneás el código del producto con la cámara del celular o con un lector USB, y el movimiento se carga solo.", min: 4, max: 6 },
   capacitacion: { name: "Capacitación", desc: "Videollamada o video grabado explicando cómo usar tu panel.", min: 1, max: 2 },
   // Turnero online: partes generales de cualquier turnero (sin importar el rubro).
   // Visual (dashboard, calendario, pantallas) = web ($45.000/h). Lógica, base de datos e integraciones = sistemas ($70.000/h).
@@ -162,11 +174,15 @@ const MODULOS = {
   promos:     { req: ["panelServ"], name: "Promociones y combos", desc: "Descuentos, combos y destacados en la portada.", min: 5, max: 8 },
   buscador:   { req: ["panelServ"], name: "Buscador", desc: "Encontrar por nombre o categoría.", min: 2, max: 4 },
   buscadorIA: { req: ["panelServ"], name: "Buscador con inteligencia artificial", desc: "La persona escribe lo que quiere lograr y aparece lo que le sirve.", min: 8, max: 12 },
-  facturacion:{ mercado: "sistemas", name: "Facturación electrónica (ARCA)", desc: "Emití facturas desde el sistema, sin entrar a la web de ARCA.", min: 30, max: 50 },
-  whatsappIA: { mercado: "sistemas", name: "Atención automática por WhatsApp con IA", desc: "Responde consultas, informa precios y agenda turnos las 24 horas.", min: 40, max: 80 },
-  migracion:  { mercado: "sistemas", name: "Pasar tus datos actuales", desc: "Importo tus clientes y datos desde Excel u otro sistema.", min: 8, max: 20 },
-  pagosMP:    { mercado: "sistemas", name: "Cobros con Mercado Pago", desc: "Registrá pagos online y su estado automáticamente.", min: 12, max: 20 },
-  avisos:     { mercado: "sistemas", name: "Recordatorios automáticos", desc: "Mails o WhatsApp de recordatorio de turnos y vencimientos.", min: 8, max: 16 },
+  facturacion:{ mercado: "sistemas", name: "Facturación electrónica (ARCA)", desc: "Emití facturas desde el sistema, sin entrar a la web de ARCA.", min: 10, max: 16 },
+  migracion:  { mercado: "sistemas", name: "Pasar tus datos actuales", desc: "Importo tus productos, stock y datos desde Excel u otro sistema.", min: 8, max: 20 },
+  pagosMP:    { mercado: "sistemas", name: "Cobros con Mercado Pago", desc: "Registrá pagos online y su estado automáticamente.", min: 6, max: 10 },
+  cobrosSaldos:{ mercado: "sistemas", name: "Control de cobros y saldos", desc: "Quién pagó, quién debe y cuánto, con recordatorios de pago y un resumen del mes.", min: 4, max: 6 },
+  // Asistente de WhatsApp con IA
+  waConexion: { mercado: "sistemas", name: "Conexión con WhatsApp Business", desc: "Conectamos tu número a WhatsApp Business con la API oficial de Meta.", min: 4, max: 6 },
+  waBase:     { mercado: "sistemas", name: "Información del negocio para la IA", desc: "Cargamos tus servicios, precios, horarios y preguntas frecuentes para que la IA responda con datos reales.", min: 6, max: 8 },
+  waRespuestas:{ mercado: "sistemas", name: "Respuestas automáticas y derivación", desc: "La IA responde consultas habituales y, cuando no sabe, pasa la conversación a una persona.", min: 6, max: 8 },
+  waPanel:    { mercado: "sistemas", name: "Panel de conversaciones", desc: "Ves todas las conversaciones, las respuestas de la IA y podés intervenir cuando quieras.", min: 6, max: 8 },
 };
 
 // Orden de avance del proyecto: así se muestran las partes en "Qué incluye"
@@ -177,7 +193,10 @@ const ORDEN = [
   "estilo", "maqueta", "plCarga", "estructura", "servicios", "nosotros", "paginas",
   // Sistema: base de datos primero, después la lógica y las pantallas
   "tInfra", "tNegocio", "tLogin", "tServicios", "tProfes", "tHorarios", "tMotor", "tReglas", "tReserva", "tCalendario", "tMiTurno",
-  "tDashboard", "tManual", "tEstados", "tReagendar", "tFicha", "tMail", "pantallas", "usuarios", "crm", "agendaInt", "reportes", "catalogo", "tienda",
+  "tDashboard", "tManual", "tEstados", "tReagendar", "tFicha", "tMail", "pantallas", "usuarios", "crm", "crmSeg", "reportes", "catalogo", "tienda",
+  // Control de inventario
+  "invBase", "multiNeg", "invProductos", "barcode", "invRecepcion", "invMov", "invStock", "invHistorial", "invPanel", "invReportes", "invTests",
+  "waConexion", "waBase", "waRespuestas", "waPanel", "facturacion", "pagosMP", "cobrosSaldos",
   // Ajustes para celular y SEO
   "responsive", "plCelular", "seo", "plSeo",
   // Pruebas, legales, contacto y publicación
@@ -216,9 +235,25 @@ const PAQUETES = [
   { id: "tienda", icon: "shopping_cart", name: "Tienda online", tagline: "Vendé y cobrá por internet, con tu propia tienda.",
     ideal: "Marcas con productos que quieren vender online sin pagar comisión mensual a una plataforma.",
     incluye: [...SIEMPRE, "estilo", "maqueta", "estructura", "nosotros", "contacto", "tienda", "legales", "capacitacion"], provee: ["panelServ", "categorias"], mercado: "sistemas", pago: "hitos" },
-  { id: "gestion", icon: "dashboard", name: "Sistema de gestión", tagline: "Clientes, agenda y números de tu negocio en un solo lugar.",
-    ideal: "Negocios que hoy se organizan con planillas, papel o varias apps sueltas.",
-    incluye: ["relev", "procesos", "setup", "pantallas", "usuarios", "crm", "agendaInt", "reportes", "responsive", "qa", "revisiones", "capacitacion"], mercado: "sistemas", pago: "hitos" },
+  { id: "gestion", icon: "inventory_2", name: "Control de Inventario a medida", tagline: "Cada entrada, salida y movimiento de tus productos, registrado en una base de datos.",
+    ideal: "Negocios que hoy controlan el stock en planillas, cuadernos o de memoria.",
+    incluye: ["relev", "procesos", "setup", "invBase", "invProductos", "invMov", "invStock", "invRecepcion", "invHistorial", "pantallas", "usuarios", "invReportes", "invPanel", "invTests", "responsive", "qa", "revisiones", "capacitacion", "multiNeg", "barcode"],
+    // Se pueden destildar: el texto de ayuda está en opcionalesInfo
+    opcionales: ["multiNeg", "barcode"],
+    opcionalesInfo: {
+      multiNeg: "Si manejás un solo negocio o depósito, destildalo: el sistema queda para un solo negocio y no se cobra.",
+      barcode: "Si no vas a escanear productos, destildalo: los movimientos se cargan a mano." },
+    mercado: "sistemas", pago: "hitos" },
+  { id: "crm", icon: "groups", name: "CRM a medida", tagline: "Tus clientes, sus historiales y el seguimiento de cada venta en un solo lugar.",
+    ideal: "Negocios con muchos clientes o ventas que hoy se siguen en planillas, WhatsApp o de memoria.",
+    incluye: ["relev", "setup", "pantallas", "usuarios", "crm", "crmSeg", "reportes", "responsive", "qa", "revisiones", "capacitacion"], mercado: "sistemas", pago: "hitos" },
+  { id: "wa", icon: "forum", name: "Asistente de WhatsApp con IA", tagline: "Responde a tus clientes las 24 horas, con la información de tu negocio.",
+    ideal: "Negocios que reciben muchas consultas por WhatsApp: precios, horarios, turnos y disponibilidad.",
+    incluye: ["relev", "waConexion", "waBase", "waRespuestas", "waPanel", "tTests", "qa", "setup", "revisiones", "capacitacion"], mercado: "sistemas", pago: "hitos",
+    noIncluye: "El costo de la IA (tokens) y las conversaciones de WhatsApp, que se pagan directo a Meta y al proveedor de IA." },
+  { id: "fac", icon: "receipt_long", name: "Facturación y cobros", tagline: "Emití comprobantes, cobrá online y sabé quién te debe, sin salir del sistema.",
+    ideal: "Negocios que facturan y necesitan controlar cobros, saldos y recordatorios de pago.",
+    incluye: ["relev", "facturacion", "pagosMP", "cobrosSaldos", "usuarios", "reportes", "setup", "tTests", "qa", "revisiones", "capacitacion"], mercado: "sistemas", pago: "hitos" },
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -247,6 +282,5 @@ const EXTRAS = [
   { title: "Potenciá tu catálogo", icon: "bolt", note: "En landing y sitio requieren el panel para editar tus servicios.", items: [
     { id: "promos", en: ["landing", "sitio", "tienda"] }, { id: "buscador", en: ["landing", "sitio", "tienda"] }, { id: "buscadorIA", en: ["landing", "sitio", "tienda"] } ]},
   { title: "Sumale al sistema", icon: "extension", items: [
-    { id: "facturacion", en: ["gestion"] }, { id: "pagosMP", en: ["gestion"] }, { id: "avisos", en: ["gestion"] },
-    { id: "whatsappIA", en: ["gestion"] }, { id: "migracion", en: ["gestion"] } ]},
+    { id: "facturacion", en: ["gestion"] }, { id: "pagosMP", en: ["gestion"] }, { id: "migracion", en: ["gestion"] } ]},
 ];
